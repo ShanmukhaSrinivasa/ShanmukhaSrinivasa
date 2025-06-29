@@ -8,6 +8,8 @@
 ⚙️ Exploring game mechanics, engine scripting, and optimization  
 🧪 Building small projects to experiment and grow my skills  
 
+[![trophy](https://github-profile-trophy.vercel.app/?username=ShanmukhaSrinivasa)](https://github.com/ryo-ma/github-profile-trophy)
+
 ---
 
 ### 🛠 Tech Stack
