@@ -1,4 +1,4 @@
-<img src="github_banner" alt="Shanmukha Banner" style="width:100%; border-radius:12px;" />
+<img src="github_banner.png" alt="Shanmukha Banner" style="width:100%; border-radius:10px;" />
 
 ### 🎮 Aspiring Game Developer
 
