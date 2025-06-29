@@ -9,11 +9,12 @@
 🧪 Building small projects to experiment and grow my skills  
 
 [![trophy](https://github-profile-trophy.vercel.app/?username=ShanmukhaSrinivasa)](https://github.com/ryo-ma/github-profile-trophy)
+ 
+## 🔗 My Links
 
-📺 **YouTube Channel**  
-[![YouTube Channel](https://img.shields.io/badge/-Visit%20My%20Channel-red?style=flat-square&logo=youtube)](https://www.youtube.com/@shanmukha3445)
-📺 **Gaming YouTube Channel**  
-[![Gaming YouTube Channel](https://img.shields.io/badge/-Visit%20My%20Channel-red?style=flat-square&logo=youtube)](https://www.youtube.com/@SHKGAMING3445)
+[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@shanmukha3445)
+
+[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@SHKGAMING3445)
 
 
 ---
