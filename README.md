@@ -22,7 +22,7 @@
 
 ### 📈 GitHub Stats
 
-![Shanmukha's GitHub stats](https://github-readme-stats.vercel.app/api?username=Shanmukha&show_icons=true&theme=radical&count_private=true&include_all_commits=true&cache_seconds=60)
+![Shanmukha's GitHub stats](https://github-readme-stats.vercel.app/api?username=ShanmukhaSrinivasa&show_icons=true&theme=radical&count_private=true&include_all_commits=true&cache_seconds=60)
 
 ---
 
