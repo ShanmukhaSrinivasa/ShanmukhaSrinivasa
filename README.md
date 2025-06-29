@@ -16,6 +16,11 @@
 
 [![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@SHKGAMING3445)
 
+<a href="https://www.youtube.com/@SHKGAMING3445" target="_blank">
+  <img src="https://img.shields.io/badge/YouTube-Click%20Here-red?style=for-the-badge&logo=youtube" alt="YouTube Channel">
+</a>
+
+
 
 ---
 
