@@ -13,6 +13,9 @@
 ## 🔗 My Links
 🔗 [Check out my Gaming YouTube channel](https://www.youtube.com/@SHKGAMING3445)
 
+[![YouTube](https://img.shields.io/badge/-YouTube-red?logo=youtube&style=social)](https://www.youtube.com/@SHKGAMING3445)
+
+
 
 ---
 
