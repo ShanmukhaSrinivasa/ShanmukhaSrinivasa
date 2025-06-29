@@ -11,21 +11,7 @@
 [![trophy](https://github-profile-trophy.vercel.app/?username=ShanmukhaSrinivasa)](https://github.com/ryo-ma/github-profile-trophy)
  
 ## 🔗 My Links
-
-[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@shanmukha3445)
-
-[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@SHKGAMING3445)
-
-<a href="https://www.youtube.com/@SHKGAMING3445" target="_blank">
-  <img src="https://img.shields.io/badge/YouTube-Click%20Here-red?style=for-the-badge&logo=youtube" alt="YouTube Channel">
-</a>
-
-[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@SHKGAMING3445)
-
-[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@SHKGAMING3445)
-
-
-
+🔗 [Check out my Gaming YouTube channel](https://www.youtube.com/@SHKGAMING3445)
 
 
 ---
