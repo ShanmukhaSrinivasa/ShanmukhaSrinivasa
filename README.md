@@ -2,6 +2,9 @@
 
 ### 🎮 Aspiring Game Developer
 
+![Profile Views](https://komarev.com/ghpvc/?username=ShanmukhaSrinivasa&color=blue&style=flat-square)
+
+
 🚀 I’m a student currently learning **Game Development**  
 🧠 Practicing **C++**, **Unreal Engine**, and **Unity**  
 🎯 Focused on both **2D** and **3D game development**  
