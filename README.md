@@ -1,3 +1,4 @@
+<img src="banner.png" alt="Shanmukha Banner" style="width:100%; border-radius:12px;" />
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:38b99a,100:134e4a&height=200&section=header&text=Hi%20I'm%20Shanmukha!&fontSize=40&fontColor=ffffff&animation=fadeIn" />
 
 ### 🎮 Aspiring Game Developer
