@@ -10,6 +10,12 @@
 
 [![trophy](https://github-profile-trophy.vercel.app/?username=ShanmukhaSrinivasa)](https://github.com/ryo-ma/github-profile-trophy)
 
+📺 **YouTube Channel**  
+[![YouTube Channel](https://img.shields.io/badge/-Visit%20My%20Channel-red?style=flat-square&logo=youtube)](https://www.youtube.com/@shanmukha3445)
+📺 **Gaming YouTube Channel**  
+[![Gaming YouTube Channel](https://img.shields.io/badge/-Visit%20My%20Channel-red?style=flat-square&logo=youtube)](https://www.youtube.com/@SHKGAMING3445)
+
+
 ---
 
 ### 🛠 Tech Stack
