@@ -1,6 +1,7 @@
 <img src="github_banner.png" alt="Shanmukha Banner" style="width:100%; border-radius:10px;" />
 
 ### 🎮 Aspiring Game Developer
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&width=435&lines=Game+Developer)](https://git.io/typing-svg)
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ShanmukhaSrinivasa&color=blue&style=flat-square)
 
