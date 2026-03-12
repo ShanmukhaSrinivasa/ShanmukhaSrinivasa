@@ -10,7 +10,6 @@
 ⚙️ Exploring game mechanics, engine scripting, and optimization  
 🧪 Building small projects to experiment and grow my skills  
 
-[![trophy](https://github-profile-trophy.vercel.app/?username=ShanmukhaSrinivasa)](https://github.com/ryo-ma/github-profile-trophy)
  
 ## 🔗 My Links
 [![YouTube Channel](https://img.shields.io/badge/-SHK-red?logo=youtube&style=social)](https://www.youtube.com/@shanmukha3445)
