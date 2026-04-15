@@ -33,9 +33,8 @@
 
 ### 📈 GitHub Stats
 
-  <img src="https://github-readme-stats.vercel.app/api?username=ShanmukhaSrinivasa&show_icons=true&theme=radical&count_private=true&include_all_commits=true" height="180" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ShanmukhaSrinivasa&layout=compact&theme=radical" height="180" />
-
+<img src="https://github-readme-stats.vercel.app/api?username=ShanmukhaSrinivasa&show_icons=true&theme=radical&include_all_commits=true&v=1" height="180" />
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ShanmukhaSrinivasa&layout=compact&theme=radical&v=1" height="180" />
 
 
 ---
