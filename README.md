@@ -31,11 +31,10 @@
 
 ---
 
-### 📈 GitHub Stats
-
-<img src="https://github-readme-stats.vercel.app/api?username=ShanmukhaSrinivasa&show_icons=true&theme=radical&include_all_commits=true&v=1" height="180" />
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ShanmukhaSrinivasa&layout=compact&theme=radical&v=1" height="180" />
-
+# 📊 GitHub Stats:
+![](https://github-readme-stats.shion.dev/api?username=ShanmukhaSrinivasa&theme=dark&hide_border=false&include_all_commits=true&count_private=true)<br/>
+![](https://streak-stats.demolab.com/?user=ShanmukhaSrinivasa&theme=dark&hide_border=false)<br/>
+![](https://github-readme-stats.shion.dev/api/top-langs/?username=ShanmukhaSrinivasa&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact)
 
 ---
 
