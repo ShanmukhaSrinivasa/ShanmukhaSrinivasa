@@ -21,8 +21,8 @@ STEEL = "#5c626c"
 SILVER = "#c9ced6"
 BRIGHT = "#eef1f5"
 MUTED = "#8d939c"
-CRIMSON = "#b3202a"
-EMBER = "#ff5a3c"
+CRIMSON = "#2f7fd8"  # accent blue (name kept from the original red theme)
+EMBER = "#5cb8ff"
 
 
 def esc(s):
@@ -52,7 +52,7 @@ def defs(w, h, accent=CRIMSON):
 <radialGradient id="bg" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG1}"/></radialGradient>
 <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="{SILVER}"/><stop offset="1" stop-color="#7d838c"/></linearGradient>
 <linearGradient id="steelline" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{SILVER}" stop-opacity="0"/><stop offset=".5" stop-color="{SILVER}" stop-opacity=".8"/><stop offset="1" stop-color="{SILVER}" stop-opacity="0"/></linearGradient>
-<linearGradient id="blood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{accent}"/><stop offset="1" stop-color="#5a0d12"/></linearGradient>
+<linearGradient id="blood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{accent}"/><stop offset="1" stop-color="#0b2547"/></linearGradient>
 <linearGradient id="vig" x1="0" y1="0" x2="0" y2="1"><stop offset=".55" stop-color="{BG1}" stop-opacity="0"/><stop offset="1" stop-color="{BG1}" stop-opacity=".95"/></linearGradient>
 <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.5" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
@@ -283,19 +283,19 @@ def footer():
 
 GAMES = [
     dict(slug="haunted-hotel", title="Haunted Hotel Empire", genre="3D Idle Tycoon", tagline="Check in. Never check out.", tech=["Unity", "C#", "Idle Economy", "WebGL"], platform="WEB · PLAYGAMA", button="▶ PLAY", color="#7b4bc9"),
-    dict(slug="last-bunker", title="Last Bunker", genre="Idle Zombie Defense", tagline="Hold the line. Survive the night.", tech=["Unity", "C#", "Wave Spawning", "Pooling"], platform="WEB · PLAYGAMA", button="▶ PLAY", color="#b3202a"),
+    dict(slug="last-bunker", title="Last Bunker", genre="Idle Zombie Defense", tagline="Hold the line. Survive the night.", tech=["Unity", "C#", "Wave Spawning", "Pooling"], platform="WEB · PLAYGAMA", button="▶ PLAY", color="#1f6fc7"),
     dict(slug="arcane-ascent", title="Arcane Ascent", genre="Puzzle Platformer", tagline="The only way out is up.", tech=["Unity", "C#", "HLSL", "2D Physics"], platform="WEB · WINDOWS · ITCH.IO", button="▶ PLAY", color="#7b4bc9"),
     dict(slug="orbit-rogue", title="Orbit Rogue", genre="Boss Rush", tagline="Stuck in orbit. Destined for glory.", tech=["Unity", "C#", "Roguelite", "AI FSM"], platform="WEB · WINDOWS · ITCH.IO", button="▶ PLAY", color="#2a6f97"),
     dict(slug="word-hunter", title="Word Hunter", genre="Word Puzzle", tagline="The ultimate test of vocabulary and speed.", tech=["Unity", "C#", "UI Toolkit", "Algorithms"], platform="WEB · WINDOWS · ITCH.IO", button="▶ PLAY", color="#2f7d5b"),
     dict(slug="tic-tac-toe", title="Tic-Tac-Toe Online", genre="Online Multiplayer", tagline="A classic rebuilt around real-time netcode.", tech=["Unity", "C#", "Photon PUN 2"], platform="WEB · WINDOWS · ITCH.IO", button="▶ PLAY", color="#9c2f6b"),
-    dict(slug="last-service", title="Last Service", genre="Psychological Horror", tagline="One final task remains.", tech=["Unity", "C#", "3D", "Narrative"], platform="WINDOWS · ITCH.IO", button="▶ DOWNLOAD", color="#b3202a"),
+    dict(slug="last-service", title="Last Service", genre="Psychological Horror", tagline="One final task remains.", tech=["Unity", "C#", "3D", "Narrative"], platform="WINDOWS · ITCH.IO", button="▶ DOWNLOAD", color="#3a5f8f"),
     dict(slug="zombie-rush", title="Zombie Rush", genre="FPS Survival", tagline="Survive the horde. Adapt or be overrun.", tech=["Unity", "C#", "FPS", "Enemy AI"], platform="WINDOWS · ITCH.IO", button="▶ DOWNLOAD", color="#5d7a1f"),
 ]
 
 TOOLS = [
     dict(slug="smart-toolkit", title="Smart Toolkit", genre="Web App", tagline="Tools and guides for game developers.", tech=["Next.js", "TypeScript", "Tailwind"], platform="SMARTTOOLKIT.APP", button="OPEN", color="#2a6f97"),
     dict(slug="debug-the-day", title="Debug the Day", genre="Gamified Life App", tagline="Tasks, habits and money, with XP and quests.", tech=["Next.js", "TypeScript", "Supabase"], platform="WEB APP", button="OPEN", color="#2f7d5b"),
-    dict(slug="smart-autosave", title="Smart AutoSave", genre="Unity Editor Tool", tagline="Never lose a scene again.", tech=["Unity", "C#", "Editor"], platform="FREE · OPEN SOURCE", button="GET IT", color="#b3202a"),
+    dict(slug="smart-autosave", title="Smart AutoSave", genre="Unity Editor Tool", tagline="Never lose a scene again.", tech=["Unity", "C#", "Editor"], platform="FREE · OPEN SOURCE", button="GET IT", color="#1f6fc7"),
 ]
 
 SIDE = [

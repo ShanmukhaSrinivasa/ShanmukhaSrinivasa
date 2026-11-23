@@ -11,11 +11,11 @@
 </p>
 
 <p align="center">
-  <a href="https://shanmukha-srinivasa-portfolio.vercel.app/"><img src="https://img.shields.io/badge/Portfolio-Visit-6b1016?style=for-the-badge&labelColor=18181d&logo=vercel&logoColor=C9CED6" alt="Portfolio" /></a>
-  <a href="https://shanmukha.itch.io"><img src="https://img.shields.io/badge/itch.io-My%20Games-6b1016?style=for-the-badge&labelColor=18181d&logo=itchdotio&logoColor=C9CED6" alt="itch.io" /></a>
-  <a href="https://www.linkedin.com/in/shanmukhasrinivasa/"><img src="https://img.shields.io/badge/LinkedIn-Connect-6b1016?style=for-the-badge&labelColor=18181d&logo=linkedin&logoColor=C9CED6" alt="LinkedIn" /></a>
-  <a href="https://www.youtube.com/@shanmukha3445"><img src="https://img.shields.io/badge/YouTube-SHK-6b1016?style=for-the-badge&labelColor=18181d&logo=youtube&logoColor=C9CED6" alt="YouTube: SHK" /></a>
-  <a href="https://www.youtube.com/@SHKGAMING3445"><img src="https://img.shields.io/badge/YouTube-SHK%20Gaming-6b1016?style=for-the-badge&labelColor=18181d&logo=youtube&logoColor=C9CED6" alt="YouTube: SHK Gaming" /></a>
+  <a href="https://shanmukha-srinivasa-portfolio.vercel.app/"><img src="https://img.shields.io/badge/Portfolio-Visit-0e3a6b?style=for-the-badge&labelColor=18181d&logo=vercel&logoColor=C9CED6" alt="Portfolio" /></a>
+  <a href="https://shanmukha.itch.io"><img src="https://img.shields.io/badge/itch.io-My%20Games-0e3a6b?style=for-the-badge&labelColor=18181d&logo=itchdotio&logoColor=C9CED6" alt="itch.io" /></a>
+  <a href="https://www.linkedin.com/in/shanmukhasrinivasa/"><img src="https://img.shields.io/badge/LinkedIn-Connect-0e3a6b?style=for-the-badge&labelColor=18181d&logo=linkedin&logoColor=C9CED6" alt="LinkedIn" /></a>
+  <a href="https://www.youtube.com/@shanmukha3445"><img src="https://img.shields.io/badge/YouTube-SHK-0e3a6b?style=for-the-badge&labelColor=18181d&logo=youtube&logoColor=C9CED6" alt="YouTube: SHK" /></a>
+  <a href="https://www.youtube.com/@SHKGAMING3445"><img src="https://img.shields.io/badge/YouTube-SHK%20Gaming-0e3a6b?style=for-the-badge&labelColor=18181d&logo=youtube&logoColor=C9CED6" alt="YouTube: SHK Gaming" /></a>
 </p>
 
 <br/>
@@ -121,11 +121,11 @@
 </p>
 
 <p align="center">
-  <img width="49%" src="https://github-readme-stats.vercel.app/api?username=ShanmukhaSrinivasa&show_icons=true&include_all_commits=true&count_private=true&hide_border=true&bg_color=111114&title_color=C9CED6&icon_color=B3202A&text_color=C9CED6" alt="GitHub stats" />
+  <img width="49%" src="https://github-readme-stats.vercel.app/api?username=ShanmukhaSrinivasa&show_icons=true&include_all_commits=true&count_private=true&hide_border=true&bg_color=111114&title_color=C9CED6&icon_color=2F7FD8&text_color=C9CED6" alt="GitHub stats" />
   <img width="49%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ShanmukhaSrinivasa&layout=compact&hide_border=true&bg_color=111114&title_color=C9CED6&text_color=C9CED6" alt="Top languages" />
 </p>
 <p align="center">
-  <img width="70%" src="https://streak-stats.demolab.com/?user=ShanmukhaSrinivasa&hide_border=true&background=111114&ring=B3202A&fire=FF5A3C&currStreakLabel=C9CED6&sideNums=EEF1F5&sideLabels=8D939C&dates=5C626C&currStreakNum=EEF1F5&stroke=2A2A30" alt="GitHub streak" />
+  <img width="70%" src="https://streak-stats.demolab.com/?user=ShanmukhaSrinivasa&hide_border=true&background=111114&ring=2F7FD8&fire=5CB8FF&currStreakLabel=C9CED6&sideNums=EEF1F5&sideLabels=8D939C&dates=5C626C&currStreakNum=EEF1F5&stroke=2A2A30" alt="GitHub streak" />
 </p>
 
 <p align="center">
@@ -144,5 +144,5 @@
 </p>
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=ShanmukhaSrinivasa&color=6b1016&style=for-the-badge&label=TRAVELERS+VISITED" alt="Profile views" />
+  <img src="https://komarev.com/ghpvc/?username=ShanmukhaSrinivasa&color=0e3a6b&style=for-the-badge&label=TRAVELERS+VISITED" alt="Profile views" />
 </p>
