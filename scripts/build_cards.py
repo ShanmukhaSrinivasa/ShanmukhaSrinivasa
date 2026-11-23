@@ -1,4 +1,4 @@
-"""Generates the animated SVG cards used in README.md.
+"""Generates the game-engine-editor style SVG panels used in README.md.
 
 Run from the repo root:  python scripts/build_cards.py
 Screenshots are read from assets/src/*.jpg and embedded as base64, because
@@ -11,9 +11,23 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "assets", "src")
 
-MONO = "'Consolas','Courier New',monospace"
 SANS = "'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif"
-BLUE, BLUE2 = "#38BDF8", "#2F6BFF"
+MONO = "'Cascadia Code','Consolas','Courier New',monospace"
+
+# Editor palette
+BG = "#1e1e1e"        # window background
+PANEL = "#282828"     # panel body
+TABBAR = "#1b1b1b"    # tab strip
+TAB = "#3a3a3a"       # active tab
+FIELD = "#2a2a2a"     # input field
+FIELD_BORDER = "#212121"
+ROW_ALT = "#2d2d2d"
+LINE = "#141414"
+TEXT = "#d4d4d4"
+LABEL = "#a6a6a6"
+DIM = "#7a7a7a"
+BLUE = "#4a9eff"
+SELECT = "#2c5d87"
 
 
 def esc(s):
@@ -25,38 +39,9 @@ def img64(name):
         return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 
 
-def defs(uid, a, b, w, h):
-    return f"""<defs>
-<linearGradient id="bg{uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#070b14"/><stop offset="1" stop-color="#0d1526"/></linearGradient>
-<linearGradient id="acc{uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient>
-<linearGradient id="scan{uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{a}" stop-opacity="0"/><stop offset=".5" stop-color="{a}" stop-opacity=".09"/><stop offset="1" stop-color="{a}" stop-opacity="0"/></linearGradient>
-<linearGradient id="fade{uid}" x1="0" y1="0" x2="0" y2="1"><stop offset=".5" stop-color="#070b14" stop-opacity="0"/><stop offset="1" stop-color="#070b14" stop-opacity=".92"/></linearGradient>
-<filter id="glow{uid}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<pattern id="grid{uid}" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="{a}" stroke-opacity=".06"/></pattern>
-</defs><rect width="{w}" height="{h}" rx="16" fill="url(#bg{uid})"/><rect width="{w}" height="{h}" rx="16" fill="url(#grid{uid})"/><rect x="1" y="1" width="{w-2}" height="{h-2}" rx="15" fill="none" stroke="url(#acc{uid})" stroke-opacity=".5" stroke-width="2"/>"""
-
-
-def scanline(uid, w, h, dur=5):
-    return f'<rect x="0" y="-80" width="{w}" height="80" fill="url(#scan{uid})"><animate attributeName="y" values="-80;{h}" dur="{dur}s" repeatCount="indefinite"/></rect>'
-
-
-def runner(uid, d, delay=0.0):
-    """A glowing dash that runs around a path."""
-    return (f'<path d="{d}" fill="none" stroke="url(#acc{uid})" stroke-width="2.5" pathLength="100" '
-            f'stroke-dasharray="14 86" filter="url(#glow{uid})"><animate attributeName="stroke-dashoffset" '
-            f'values="100;0" dur="4s" begin="{delay:.2f}s" repeatCount="indefinite"/></path>')
-
-
-def chips(items, x, y, color, max_x):
-    out = []
-    for t in items:
-        w = int(len(t) * 6.9 + 18)
-        if x + w > max_x:
-            break
-        out.append(f'<rect x="{x}" y="{y}" width="{w}" height="22" rx="11" fill="{color}" fill-opacity=".12" stroke="{color}" stroke-opacity=".5"/>'
-                   f'<text x="{x + w / 2}" y="{y + 15}" text-anchor="middle" font-family="{MONO}" font-size="11.5" fill="{color}">{esc(t)}</text>')
-        x += w + 8
-    return "".join(out)
+def tw(s, size, mono=False):
+    """Rough text width estimate."""
+    return len(s) * size * (0.6 if mono else 0.56)
 
 
 def write(path, svg):
@@ -67,161 +52,427 @@ def write(path, svg):
     print(f"{path}  {len(svg) // 1024} KB")
 
 
-# ─────────────────────────────── PLAYER CARD ───────────────────────────────
-def player_card():
-    W, H, u = 900, 420, "p"
-    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">', defs(u, BLUE, BLUE2, W, H)]
-    s.append(f'<path d="M24 22 h10 M24 22 v10" stroke="{BLUE}" stroke-width="3"/><path d="M876 22 h-10 M876 22 v10" stroke="{BLUE2}" stroke-width="3"/>')
-    s.append(f'<text x="450" y="44" text-anchor="middle" font-family="{MONO}" font-size="20" font-weight="700" letter-spacing="6" fill="url(#acc{u})" filter="url(#glow{u})">// PLAYER PROFILE</text>')
-    s.append(f'<rect x="360" y="56" width="180" height="2" fill="url(#acc{u})"><animate attributeName="width" values="40;180;40" dur="4s" repeatCount="indefinite"/><animate attributeName="x" values="430;360;430" dur="4s" repeatCount="indefinite"/></rect>')
-    s.append(scanline(u, W, H))
-    panel = "M38,80 H274 V386 L260,400 H24 V94 Z"
-    s.append(f'<path d="{panel}" fill="#0b1324" fill-opacity=".9" stroke="{BLUE}" stroke-opacity=".35" stroke-width="1.5"/>')
-    s.append(runner(u, panel))
-    # avatar
-    s.append(f'<clipPath id="av{u}"><circle cx="149" cy="170" r="54"/></clipPath>')
-    s.append(f'<image href="{img64("avatar.jpg")}" x="95" y="116" width="108" height="108" clip-path="url(#av{u})" preserveAspectRatio="xMidYMid slice"/>')
-    s.append(f'<circle cx="149" cy="170" r="54" fill="none" stroke="url(#acc{u})" stroke-width="3" filter="url(#glow{u})"/>')
-    s.append(f'<circle cx="149" cy="170" r="64" fill="none" stroke="{BLUE}" stroke-opacity=".4" stroke-dasharray="6 8"><animateTransform attributeName="transform" type="rotate" from="0 149 170" to="360 149 170" dur="14s" repeatCount="indefinite"/></circle>')
-    s.append(f'<text x="149" y="262" text-anchor="middle" font-family="{SANS}" font-size="19" font-weight="900" fill="#fff" letter-spacing="1">SHANMUKHA</text>')
-    s.append(f'<text x="149" y="282" text-anchor="middle" font-family="{SANS}" font-size="14" font-weight="700" fill="#cfe3ff" letter-spacing="3">SRINIVASA</text>')
-    s.append(f'<text x="149" y="304" text-anchor="middle" font-family="{MONO}" font-size="11.5" fill="{BLUE}" letter-spacing="2">GAMEPLAY PROGRAMMER</text>')
-    s.append(f'<text x="44" y="330" font-family="{MONO}" font-size="11.5" fill="#9fb3d1">XP: ALWAYS LEVELING UP</text>')
-    s.append(f'<rect x="44" y="338" width="210" height="10" rx="5" fill="#16213d"/>')
-    s.append(f'<rect x="44" y="338" width="0" height="10" rx="5" fill="url(#acc{u})" filter="url(#glow{u})"><animate attributeName="width" values="0;176" dur="2s" fill="freeze"/></rect>')
-    s.append(f'<text x="44" y="372" font-family="{MONO}" font-size="11" fill="#4ade80">● ONLINE — BUILDING GAMES<animate attributeName="opacity" values="1;.25;1" dur="1.6s" repeatCount="indefinite"/></text>')
+def open_svg(w, h):
+    return [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">',
+            f'<rect width="{w}" height="{h}" rx="6" fill="{BG}"/>']
+
+
+def kebab(x, y):
+    return "".join(f'<circle cx="{x}" cy="{y + i * 5}" r="1.3" fill="{DIM}"/>' for i in range(3))
+
+
+def tabs(x, y, w, labels, active=0, right_text=""):
+    """Editor tab strip. labels: list of (icon, text)."""
+    s = [f'<rect x="{x}" y="{y}" width="{w}" height="26" fill="{TABBAR}"/>']
+    tx = x
+    for i, (icon, label) in enumerate(labels):
+        width = int(tw(label, 12) + 40)
+        if i == active:
+            s.append(f'<rect x="{tx}" y="{y}" width="{width}" height="26" fill="{TAB}"/>'
+                     f'<rect x="{tx}" y="{y}" width="{width}" height="2" fill="{BLUE}"/>')
+        col = TEXT if i == active else DIM
+        s.append(f'<text x="{tx + 12}" y="{y + 17}" font-family="{SANS}" font-size="11" fill="{col}">{icon}</text>'
+                 f'<text x="{tx + 26}" y="{y + 17}" font-family="{SANS}" font-size="12" fill="{col}">{esc(label)}</text>')
+        tx += width
+    if right_text:
+        s.append(f'<text x="{x + w - 28}" y="{y + 17}" text-anchor="end" font-family="{SANS}" font-size="11" fill="{DIM}">{esc(right_text)}</text>')
+    s.append(kebab(x + w - 14, y + 8))
+    return "".join(s)
+
+
+def dropdown(x, y, w, text, h=20):
+    return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="3" fill="#3c3c3c" stroke="{FIELD_BORDER}"/>'
+            f'<text x="{x + 8}" y="{y + h / 2 + 4}" font-family="{SANS}" font-size="12" fill="{TEXT}">{esc(text)}</text>'
+            f'<path d="M{x + w - 14},{y + h / 2 - 2} l4,4 l4,-4" fill="none" stroke="{LABEL}" stroke-width="1.4"/>')
+
+
+def field(x, y, w, text, h=20, color=TEXT):
+    return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="3" fill="{FIELD}" stroke="{FIELD_BORDER}"/>'
+            f'<text x="{x + 8}" y="{y + h / 2 + 4}" font-family="{SANS}" font-size="12" fill="{color}">{esc(text)}</text>')
+
+
+def checkbox(x, y, on=True):
+    s = f'<rect x="{x}" y="{y}" width="14" height="14" rx="2" fill="#3c3c3c" stroke="{FIELD_BORDER}"/>'
+    if on:
+        s += f'<path d="M{x + 3},{y + 7} l3,3 l5,-6" fill="none" stroke="{TEXT}" stroke-width="1.8"/>'
+    return s
+
+
+def chips(items, x, y, max_x):
+    out = []
+    for t in items:
+        w = int(tw(t, 11) + 16)
+        if x + w > max_x:
+            break
+        out.append(f'<rect x="{x}" y="{y}" width="{w}" height="18" rx="9" fill="#3a3a3a"/>'
+                   f'<text x="{x + w / 2}" y="{y + 13}" text-anchor="middle" font-family="{SANS}" font-size="11" fill="{LABEL}">{esc(t)}</text>')
+        x += w + 6
+    return "".join(out)
+
+
+def cube(x, y, s=14, color=BLUE):
+    """Small isometric cube icon (GameObject / prefab)."""
+    h = s / 2
+    return (f'<path d="M{x},{y + h / 2} L{x + h},{y} L{x + s},{y + h / 2} L{x + h},{y + h} Z" fill="{color}" opacity=".95"/>'
+            f'<path d="M{x},{y + h / 2} L{x + h},{y + h} L{x + h},{y + s} L{x},{y + s - h / 2} Z" fill="{color}" opacity=".65"/>'
+            f'<path d="M{x + s},{y + h / 2} L{x + h},{y + h} L{x + h},{y + s} L{x + s},{y + s - h / 2} Z" fill="{color}" opacity=".45"/>')
+
+
+def play_button(x, y):
+    return (f'<rect x="{x}" y="{y}" width="30" height="22" rx="3" fill="{SELECT}" stroke="{FIELD_BORDER}">'
+            f'<animate attributeName="fill" values="{SELECT};#3b78ad;{SELECT}" dur="2s" repeatCount="indefinite"/></rect>'
+            f'<path d="M{x + 11},{y + 6} L{x + 20},{y + 11} L{x + 11},{y + 16} Z" fill="#fff"/>')
+
+
+# ─────────────────────────────── HEADER: toolbar + game view with banner ───────────────────────────────
+def header():
+    W, H = 900, 412
+    s = open_svg(W, H)
+    s.append(f'<rect x="0" y="0" width="{W}" height="36" rx="6" fill="#2b2b2b"/><rect x="0" y="30" width="{W}" height="6" fill="#2b2b2b"/>')
+    mx = 14
+    for m in ["File", "Edit", "Assets", "GameObject", "Window"]:
+        s.append(f'<text x="{mx}" y="23" font-family="{SANS}" font-size="12" fill="{TEXT}">{m}</text>')
+        mx += tw(m, 12) * 1.1 + 18
+    cx = W / 2 - 48
+    s.append(play_button(cx, 7))
+    s.append(f'<rect x="{cx + 33}" y="7" width="30" height="22" rx="3" fill="#3c3c3c" stroke="{FIELD_BORDER}"/>'
+             f'<rect x="{cx + 44}" y="13" width="3" height="10" fill="{TEXT}"/><rect x="{cx + 50}" y="13" width="3" height="10" fill="{TEXT}"/>')
+    s.append(f'<rect x="{cx + 66}" y="7" width="30" height="22" rx="3" fill="#3c3c3c" stroke="{FIELD_BORDER}"/>'
+             f'<path d="M{cx + 76},13 L{cx + 83},18 L{cx + 76},23 Z" fill="{TEXT}"/><rect x="{cx + 84}" y="13" width="2.5" height="10" fill="{TEXT}"/>')
+    s.append(f'<text x="{W - 14}" y="23" text-anchor="end" font-family="{SANS}" font-size="12" fill="{LABEL}">SHK_Profile — Main.scene</text>')
+    y0 = 42
+    s.append(f'<rect x="6" y="{y0}" width="{W - 12}" height="{H - y0 - 6}" fill="{PANEL}"/>')
+    s.append(tabs(6, y0, W - 12, [("#", "Scene"), ("▶", "Game")], active=1))
+    ty = y0 + 26
+    s.append(f'<rect x="6" y="{ty}" width="{W - 12}" height="26" fill="#323232"/><rect x="6" y="{ty + 26}" width="{W - 12}" height="1" fill="{LINE}"/>')
+    s.append(dropdown(12, ty + 3, 92, "Display 1"))
+    s.append(dropdown(110, ty + 3, 104, "Free Aspect"))
+    s.append(f'<text x="226" y="{ty + 17}" font-family="{SANS}" font-size="12" fill="{LABEL}">Scale</text>'
+             f'<rect x="262" y="{ty + 12}" width="80" height="3" rx="1.5" fill="#1a1a1a"/><circle cx="270" cy="{ty + 13.5}" r="5" fill="#9a9a9a"/>'
+             f'<text x="352" y="{ty + 17}" font-family="{SANS}" font-size="12" fill="{LABEL}">1x</text>')
+    for lab, rx, on in [("Play Maximized", W - 300, False), ("Stats", W - 180, True), ("Gizmos", W - 120, False)]:
+        s.append(f'<text x="{rx}" y="{ty + 17}" font-family="{SANS}" font-size="12" fill="{TEXT if on else LABEL}">{lab}</text>')
+    by = ty + 30
+    bw = W - 20
+    bh = round(bw / 3)
+    s.append(f'<image href="{img64("banner.jpg")}" x="10" y="{by}" width="{bw}" height="{bh}" preserveAspectRatio="xMidYMid slice"/>')
+    s.append(f'<rect x="10" y="{by}" width="{bw}" height="{bh}" fill="none" stroke="{BLUE}" stroke-opacity=".5" stroke-width="2">'
+             f'<animate attributeName="stroke-opacity" values=".15;.6;.15" dur="3s" repeatCount="indefinite"/></rect>')
+    sx, sy = W - 196, by + 12
+    s.append(f'<rect x="{sx}" y="{sy}" width="176" height="74" rx="4" fill="#000" fill-opacity=".55"/>'
+             f'<text x="{sx + 10}" y="{sy + 18}" font-family="{SANS}" font-size="11" font-weight="700" fill="#fff">Statistics</text>'
+             f'<text x="{sx + 10}" y="{sy + 36}" font-family="{MONO}" font-size="11" fill="#cfcfcf">FPS: <tspan fill="#7CFC9A">60</tspan> (16.6ms)</text>'
+             f'<text x="{sx + 10}" y="{sy + 52}" font-family="{MONO}" font-size="11" fill="#cfcfcf">Batches: 42  Tris: 18.2k</text>'
+             f'<text x="{sx + 10}" y="{sy + 67}" font-family="{MONO}" font-size="11" fill="#cfcfcf">Bugs: <tspan fill="#7CFC9A">0</tspan> (hopefully)</text>')
+    s.append("</svg>")
+    write("assets/editor/header.svg", "".join(s))
+
+
+# ─────────────────────────────── INSPECTOR ───────────────────────────────
+def inspector():
+    W = 900
     rows = [
-        ("CLASS", "Game Developer · Gameplay Programmer"),
-        ("MAIN WEAPON", "Unity + C#"),
-        ("SIDE ENGINES", "Unreal Engine · Godot"),
-        ("LOW-LEVEL", "C++ with Raylib & SFML"),
-        ("BACKGROUND", "Game Design & Animation"),
-        ("RELEASES", "itch.io · Playgama · Web, Windows, Android"),
-        ("HOME BASE", "Bengaluru, India"),
+        ("Role", "text", "Game Developer · Gameplay Programmer"),
+        ("Main Engine", "drop", "Unity"),
+        ("Languages", "chips", ["C#", "C++", "TypeScript", "JavaScript"]),
+        ("Also Builds In", "chips", ["Unreal Engine", "Godot", "Raylib", "SFML"]),
+        ("Background", "text", "Game Design & Animation"),
+        ("Publishes On", "chips", ["itch.io", "Playgama", "Web", "Windows", "Android"]),
+        ("Home Base", "text", "Bengaluru, India"),
+        ("Always Learning", "check", True),
+        ("Current Quest", "caret", "Shipping polished web games & Unity editor tools"),
     ]
-    y = 80
-    for i, (k, v) in enumerate(rows):
-        s.append(f'<path d="M306,{y} H876 V{y+24} L868,{y+32} H298 V{y+8} Z" fill="#0b1324" stroke="{BLUE}" stroke-opacity=".25"/>')
-        s.append(f'<rect x="298" y="{y}" width="4" height="32" fill="url(#acc{u})"/>')
-        s.append(f'<text x="316" y="{y+21}" font-family="{MONO}" font-size="12.5" fill="{BLUE}" letter-spacing="2">{k}</text>')
-        s.append(f'<text x="470" y="{y+21}" font-family="{SANS}" font-size="15" font-weight="700" fill="#fff" opacity="0">{esc(v)}'
-                 f'<animate attributeName="opacity" values="0;1" dur=".4s" begin="{0.15 * i:.2f}s" fill="freeze"/></text>')
-        y += 40
-    s.append(f'<text x="298" y="378" font-family="{MONO}" font-size="12" fill="#9fb3d1">CURRENT QUEST &gt; <tspan fill="#fff">shipping polished web games &amp; Unity editor tools</tspan></text>')
-    s.append(f'<rect x="298" y="388" width="578" height="2" fill="url(#acc{u})" opacity=".35"/>')
+    y_comp = 132
+    H = y_comp + 34 + 30 + len(rows) * 30 + 60
+    s = open_svg(W, H)
+    s.append(f'<rect x="6" y="6" width="{W - 12}" height="{H - 12}" fill="{PANEL}"/>')
+    s.append(tabs(6, 6, W - 12, [("ⓘ", "Inspector"), ("☀", "Lighting")], active=0))
+    s.append(f'<clipPath id="av"><rect x="20" y="44" width="58" height="58" rx="4"/></clipPath>'
+             f'<image href="{img64("avatar.jpg")}" x="20" y="44" width="58" height="58" clip-path="url(#av)" preserveAspectRatio="xMidYMid slice"/>'
+             f'<rect x="20" y="44" width="58" height="58" rx="4" fill="none" stroke="{FIELD_BORDER}" stroke-width="2"/>')
+    s.append(checkbox(92, 48))
+    s.append(field(114, 45, W - 236, "Shanmukha Srinivasa", 22))
+    s.append(checkbox(W - 108, 49) + f'<text x="{W - 88}" y="61" font-family="{SANS}" font-size="12" fill="{TEXT}">Static</text>'
+             f'<path d="M{W - 40},56 l4,4 l4,-4" fill="none" stroke="{LABEL}" stroke-width="1.4"/>')
+    s.append(f'<text x="92" y="93" font-family="{SANS}" font-size="12" fill="{LABEL}">Tag</text>')
+    s.append(dropdown(124, 79, 220, "Developer"))
+    s.append(f'<text x="368" y="93" font-family="{SANS}" font-size="12" fill="{LABEL}">Layer</text>')
+    s.append(dropdown(410, 79, 220, "Gameplay"))
+    s.append(f'<rect x="6" y="{y_comp - 14}" width="{W - 12}" height="1" fill="{LINE}"/>')
+    y = y_comp
+    s.append(f'<rect x="6" y="{y}" width="{W - 12}" height="26" fill="#323232"/>'
+             f'<path d="M16,{y + 10} l5,7 l5,-7 Z" fill="{LABEL}"/>' + checkbox(34, y + 6) +
+             f'<rect x="56" y="{y + 6}" width="14" height="14" rx="2" fill="#5a8a3c"/><text x="63" y="{y + 17}" text-anchor="middle" font-family="{MONO}" font-size="10" font-weight="700" fill="#fff">#</text>'
+             f'<text x="78" y="{y + 18}" font-family="{SANS}" font-size="12" font-weight="700" fill="{TEXT}">Player Profile (Script)</text>')
+    s.append(kebab(W - 22, y + 8))
+    y += 34
+    LX, VX = 36, 230
+    s.append(f'<text x="{LX}" y="{y + 14}" font-family="{SANS}" font-size="12" fill="{DIM}">Script</text>')
+    s.append(f'<rect x="{VX}" y="{y}" width="{W - VX - 24}" height="20" rx="3" fill="#262626" stroke="{FIELD_BORDER}"/>'
+             f'<rect x="{VX + 6}" y="{y + 4}" width="12" height="12" rx="2" fill="#5a8a3c"/>'
+             f'<text x="{VX + 26}" y="{y + 14}" font-family="{SANS}" font-size="12" fill="{DIM}">PlayerProfile</text>')
+    y += 30
+    for i, (label, kind, val) in enumerate(rows):
+        d = f'{0.2 + i * 0.12:.2f}s'
+        g = [f'<g opacity="0"><animate attributeName="opacity" values="0;1" dur=".35s" begin="{d}" fill="freeze"/>']
+        g.append(f'<text x="{LX}" y="{y + 14}" font-family="{SANS}" font-size="12" fill="{LABEL}">{esc(label)}</text>')
+        if kind == "text":
+            g.append(field(VX, y, W - VX - 24, val))
+        elif kind == "drop":
+            g.append(dropdown(VX, y, 220, val))
+        elif kind == "chips":
+            g.append(chips(val, VX, y + 1, W - 24))
+        elif kind == "check":
+            g.append(checkbox(VX, y + 3, val))
+        elif kind == "caret":
+            g.append(f'<rect x="{VX}" y="{y}" width="{W - VX - 24}" height="20" rx="3" fill="{FIELD}" stroke="{BLUE}"/>'
+                     f'<text x="{VX + 8}" y="{y + 14}" font-family="{SANS}" font-size="12" fill="{TEXT}">{esc(val)}</text>'
+                     f'<rect x="{VX + 10 + tw(val, 12) * 0.98:.0f}" y="{y + 4}" width="1.5" height="12" fill="{TEXT}">'
+                     f'<animate attributeName="opacity" values="1;1;0;0" dur="1s" repeatCount="indefinite"/></rect>')
+        g.append("</g>")
+        s.append("".join(g))
+        y += 30
+    bx = W / 2 - 110
+    s.append(f'<rect x="6" y="{y + 4}" width="{W - 12}" height="1" fill="{LINE}"/>')
+    s.append(f'<rect x="{bx}" y="{y + 16}" width="220" height="26" rx="4" fill="#3c3c3c" stroke="{FIELD_BORDER}"/>'
+             f'<text x="{W / 2}" y="{y + 33}" text-anchor="middle" font-family="{SANS}" font-size="12" fill="{TEXT}">Add Component</text>')
     s.append("</svg>")
-    write("assets/player-card.svg", "".join(s))
+    write("assets/editor/inspector.svg", "".join(s))
 
 
-# ─────────────────────────────── GAME CARDS ───────────────────────────────
-def game_card(slug, title, genre, tagline, tech, platform, button, a, b, folder="shipped"):
-    W, H, u = 440, 400, "g"
-    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">', defs(u, a, b, W, H)]
-    clip = "M30,12 H428 V228 L410,246 H12 V30 Z"
-    s.append(f'<clipPath id="clip{u}"><path d="{clip}"/></clipPath><g clip-path="url(#clip{u})">')
-    s.append(f'<image href="{img64(slug + ".jpg")}" x="12" y="12" width="416" height="234" preserveAspectRatio="xMidYMid slice"/>')
-    s.append(f'<rect x="12" y="12" width="416" height="234" fill="url(#fade{u})"/></g>')
-    s.append(f'<path d="{clip}" fill="none" stroke="{a}" stroke-opacity=".45" stroke-width="1.5"/>')
-    s.append(runner(u, clip))
-    gw = int(len(genre) * 7.2 + 22)
-    s.append(f'<rect x="26" y="210" width="{gw}" height="24" rx="4" fill="#070b14" fill-opacity=".85" stroke="{a}"/>'
-             f'<text x="{26 + gw / 2}" y="226" text-anchor="middle" font-family="{MONO}" font-size="11.5" font-weight="700" fill="{a}" letter-spacing="1">{esc(genre.upper())}</text>')
-    s.append(f'<text x="20" y="276" font-family="{SANS}" font-size="23" font-weight="900" fill="#fff" letter-spacing=".5">{esc(title)}</text>')
-    s.append(f'<text x="20" y="298" font-family="{SANS}" font-size="13" font-style="italic" fill="#9fb3d1">{esc(tagline)}</text>')
-    s.append(chips(tech, 20, 312, a, 420))
-    s.append(f'<rect x="20" y="350" width="400" height="1" fill="{a}" opacity=".25"/>')
-    s.append(f'<text x="20" y="378" font-family="{MONO}" font-size="11" fill="#7f93b5">{esc(platform)}</text>')
-    bw = int(len(button) * 8 + 34)
-    bx = 420 - bw
-    s.append(f'<rect x="{bx}" y="360" width="{bw}" height="28" rx="6" fill="url(#acc{u})" filter="url(#glow{u})"><animate attributeName="opacity" values="1;.7;1" dur="1.8s" repeatCount="indefinite"/></rect>')
-    s.append(f'<text x="{bx + bw / 2}" y="379" text-anchor="middle" font-family="{MONO}" font-size="12.5" font-weight="700" fill="#070b14" letter-spacing="1">{esc(button)}</text>')
-    s.append(scanline(u, W, H, 6))
+# ─────────────────────────────── HIERARCHY (games index) ───────────────────────────────
+def hierarchy(games):
+    W = 900
+    H = 90 + len(games) * 24 + 14
+    s = open_svg(W, H)
+    s.append(f'<rect x="6" y="6" width="{W - 12}" height="{H - 12}" fill="{PANEL}"/>')
+    s.append(tabs(6, 6, W - 12, [("☰", "Hierarchy")], right_text=f"{len(games)} games"))
+    s.append(f'<text x="16" y="53" font-family="{SANS}" font-size="17" fill="{TEXT}">+</text>'
+             f'<path d="M30,46 l3,3 l3,-3" fill="none" stroke="{LABEL}" stroke-width="1.3"/>')
+    s.append(f'<rect x="46" y="38" width="{W - 70}" height="20" rx="10" fill="{FIELD}" stroke="{FIELD_BORDER}"/>'
+             f'<circle cx="60" cy="47" r="4.5" fill="none" stroke="{DIM}" stroke-width="1.5"/><path d="M63,50 l4,4" stroke="{DIM}" stroke-width="1.5"/>'
+             f'<text x="74" y="52" font-family="{SANS}" font-size="12" fill="{DIM}">Search…</text>')
+    y = 64
+    s.append(f'<path d="M16,{y + 8} l5,7 l5,-7 Z" fill="{LABEL}"/>'
+             f'<path d="M32,{y + 5} h14 v12 h-14 Z" fill="none" stroke="{LABEL}" stroke-width="1.4"/>'
+             f'<text x="54" y="{y + 16}" font-family="{SANS}" font-size="12" font-weight="700" fill="{TEXT}">Games.scene</text>')
+    y += 24
+    n = len(games)
+    ys = ";".join(str(y + i * 24) for i in range(n))
+    s.append(f'<rect x="6" y="{y}" width="{W - 12}" height="24" fill="{SELECT}">'
+             f'<animate attributeName="y" values="{ys}" dur="{n * 1.2}s" calcMode="discrete" repeatCount="indefinite"/></rect>')
+    for g in games:
+        s.append(f'<path d="M36,{y + 8} l6,4 l-6,4 Z" fill="{DIM}"/>' + cube(48, y + 5, 14, g["color"]))
+        s.append(f'<text x="70" y="{y + 16}" font-family="{SANS}" font-size="12.5" fill="{TEXT}">{esc(g["title"])}</text>')
+        s.append(f'<text x="360" y="{y + 16}" font-family="{SANS}" font-size="12" fill="{LABEL}">{esc(g["genre"])}</text>')
+        s.append(f'<text x="{W - 20}" y="{y + 16}" text-anchor="end" font-family="{MONO}" font-size="11" fill="{DIM}">{esc(g["platform"])}</text>')
+        y += 24
     s.append("</svg>")
-    write(f"assets/{folder}/{slug}.svg", "".join(s))
+    write("assets/editor/hierarchy.svg", "".join(s))
+
+
+# ─────────────────────────────── GAME VIEW CARD ───────────────────────────────
+def game_card(g):
+    W, H = 440, 372
+    s = open_svg(W, H)
+    s.append(f'<rect x="4" y="4" width="{W - 8}" height="{H - 8}" fill="{PANEL}"/>')
+    s.append(tabs(4, 4, W - 8, [("▶", "Game")], right_text=g["title"]))
+    ty = 30
+    s.append(f'<rect x="4" y="{ty}" width="{W - 8}" height="24" fill="#323232"/>')
+    s.append(dropdown(10, ty + 3, 80, "Display 1", 18))
+    s.append(dropdown(96, ty + 3, 60, "16:9", 18))
+    s.append(f'<text x="168" y="{ty + 16}" font-family="{SANS}" font-size="11" fill="{LABEL}">Scale 1x</text>')
+    s.append(play_button(W - 44, ty + 1))
+    iy = ty + 28
+    ih = round((W - 16) * 9 / 16)
+    s.append(f'<image href="{img64(g["slug"] + ".jpg")}" x="8" y="{iy}" width="{W - 16}" height="{ih}" preserveAspectRatio="xMidYMid slice"/>')
+    s.append(f'<rect x="8" y="{iy}" width="{W - 16}" height="{ih}" fill="none" stroke="{g["color"]}" stroke-opacity=".6" stroke-width="2">'
+             f'<animate attributeName="stroke-opacity" values=".15;.7;.15" dur="3s" repeatCount="indefinite"/></rect>')
+    y = iy + ih + 8
+    s.append(cube(14, y + 4, 16, g["color"]))
+    s.append(f'<text x="38" y="{y + 17}" font-family="{SANS}" font-size="17" font-weight="700" fill="#fff">{esc(g["title"])}</text>')
+    s.append(f'<text x="{W - 14}" y="{y + 17}" text-anchor="end" font-family="{SANS}" font-size="11.5" fill="{g["color"]}">{esc(g["genre"])}</text>')
+    s.append(f'<text x="14" y="{y + 38}" font-family="{SANS}" font-size="12" fill="{LABEL}">{esc(g["tagline"])}</text>')
+    s.append(chips(g["tech"], 14, y + 48, W - 14))
+    s.append("</svg>")
+    write(f"assets/games/{g['slug']}.svg", "".join(s))
+
+
+# ─────────────────────────────── PACKAGE MANAGER (tools) ───────────────────────────────
+def package_row(t, i):
+    W, H = 900, 128
+    s = open_svg(W, H)
+    s.append(f'<rect x="6" y="6" width="{W - 12}" height="{H - 12}" fill="{PANEL}"/>')
+    s.append(f'<clipPath id="pc"><rect x="18" y="12" width="184" height="104" rx="4"/></clipPath>'
+             f'<image href="{img64(t["slug"] + ".jpg")}" x="18" y="12" width="184" height="104" clip-path="url(#pc)" preserveAspectRatio="xMidYMid slice"/>'
+             f'<rect x="18" y="12" width="184" height="104" rx="4" fill="none" stroke="{FIELD_BORDER}" stroke-width="2"/>')
+    s.append(f'<text x="222" y="34" font-family="{SANS}" font-size="17" font-weight="700" fill="#fff">{esc(t["title"])}</text>')
+    s.append(f'<text x="222" y="54" font-family="{SANS}" font-size="12" fill="{DIM}">by Shanmukha · {esc(t["kind"])}</text>')
+    s.append(f'<text x="222" y="76" font-family="{SANS}" font-size="13" fill="{TEXT}">{esc(t["desc"])}</text>')
+    s.append(chips(t["tech"], 222, 90, W - 170))
+    bw = int(tw(t["button"], 12) + 30)
+    bx = W - 24 - bw
+    s.append(f'<rect x="{bx}" y="20" width="{bw}" height="26" rx="4" fill="{SELECT}" stroke="{FIELD_BORDER}"/>'
+             f'<text x="{bx + bw / 2}" y="37" text-anchor="middle" font-family="{SANS}" font-size="12" font-weight="600" fill="#fff">{esc(t["button"])}</text>')
+    s.append(f'<circle cx="{W - 30}" cy="102" r="5" fill="#5cb85c"><animate attributeName="opacity" values="1;.35;1" dur="2s" begin="{i * .4:.1f}s" repeatCount="indefinite"/></circle>'
+             f'<text x="{W - 42}" y="106" text-anchor="end" font-family="{SANS}" font-size="11.5" fill="{LABEL}">{esc(t["status"])}</text>')
+    s.append("</svg>")
+    write(f"assets/editor/package-{t['slug']}.svg", "".join(s))
+
+
+def packages_header():
+    W, H = 900, 62
+    s = open_svg(W, H)
+    s.append(f'<rect x="6" y="6" width="{W - 12}" height="{H - 6}" fill="{PANEL}"/>')
+    s.append(tabs(6, 6, W - 12, [("▣", "Package Manager")]))
+    s.append(f'<rect x="6" y="32" width="{W - 12}" height="28" fill="#323232"/>')
+    s.append(dropdown(12, 36, 150, "Packages: My Tools"))
+    s.append(dropdown(170, 36, 100, "Sort: Name"))
+    s.append(f'<rect x="{W - 240}" y="36" width="220" height="20" rx="10" fill="{FIELD}" stroke="{FIELD_BORDER}"/>'
+             f'<text x="{W - 226}" y="50" font-family="{SANS}" font-size="12" fill="{DIM}">Search…</text>')
+    s.append("</svg>")
+    write("assets/editor/packages-header.svg", "".join(s))
+
+
+# ─────────────────────────────── CONSOLE (skills) ───────────────────────────────
+def console():
+    logs = [
+        ("i", "Gameplay systems ready: combat, upgrades, waves, quests, economy"),
+        ("i", "Game feel tuned: screen shake, hit-stop, juicy feedback"),
+        ("i", "Enemy AI online: state machines, auto-targeting, boss phases"),
+        ("i", "Procedural generation seeded: endless levels, word grids"),
+        ("i", "Object pooling enabled. GC spikes: 0"),
+        ("i", "Shaders compiled: HLSL, Shader Graph"),
+        ("i", "Multiplayer: Photon PUN 2 room joined (2/2 players)"),
+        ("i", "WebGL builds published to itch.io and Playgama"),
+        ("i", "Art pipeline: Blender and Maya assets imported"),
+        ("i", "Editor tools loaded: Smart AutoSave"),
+        ("w", "Coffee level low. Shipping anyway."),
+    ]
+    W = 900
+    H = 64 + len(logs) * 24 + 36
+    s = open_svg(W, H)
+    s.append(f'<rect x="6" y="6" width="{W - 12}" height="{H - 12}" fill="{PANEL}"/>')
+    s.append(tabs(6, 6, W - 12, [("▤", "Console"), ("▦", "Project")], active=0))
+    s.append(f'<rect x="6" y="32" width="{W - 12}" height="26" fill="#323232"/>')
+    bx = 12
+    for b in ["Clear", "Collapse", "Error Pause"]:
+        w = int(tw(b, 12) + 18)
+        s.append(f'<rect x="{bx}" y="36" width="{w}" height="18" rx="3" fill="#3c3c3c" stroke="{FIELD_BORDER}"/>'
+                 f'<text x="{bx + w / 2}" y="49" text-anchor="middle" font-family="{SANS}" font-size="11.5" fill="{TEXT}">{b}</text>')
+        bx += w + 6
+    infos = sum(1 for k, _ in logs if k == "i")
+    warns = len(logs) - infos
+    cx = W - 150
+    s.append(f'<circle cx="{cx}" cy="45" r="7" fill="none" stroke="#cfcfcf" stroke-width="1.5"/><text x="{cx}" y="49" text-anchor="middle" font-family="{SANS}" font-size="10" font-weight="700" fill="#cfcfcf">i</text>'
+             f'<text x="{cx + 12}" y="49" font-family="{SANS}" font-size="12" fill="{TEXT}">{infos}</text>'
+             f'<path d="M{cx + 44},51 l7,-13 l7,13 Z" fill="#e8b339"/><text x="{cx + 51}" y="50" text-anchor="middle" font-family="{SANS}" font-size="9" font-weight="700" fill="#222">!</text>'
+             f'<text x="{cx + 64}" y="49" font-family="{SANS}" font-size="12" fill="{TEXT}">{warns}</text>'
+             f'<circle cx="{cx + 96}" cy="45" r="7" fill="#d9534f"/><text x="{cx + 96}" y="49" text-anchor="middle" font-family="{SANS}" font-size="10" font-weight="700" fill="#fff">×</text>'
+             f'<text x="{cx + 108}" y="49" font-family="{SANS}" font-size="12" fill="{TEXT}">0</text>')
+    y = 60
+    for i, (kind, msg) in enumerate(logs):
+        d = f"{0.25 + i * 0.22:.2f}s"
+        g = [f'<g opacity="0"><animate attributeName="opacity" values="0;1" dur=".2s" begin="{d}" fill="freeze"/>']
+        if i % 2:
+            g.append(f'<rect x="6" y="{y}" width="{W - 12}" height="24" fill="{ROW_ALT}"/>')
+        if kind == "i":
+            g.append(f'<circle cx="24" cy="{y + 12}" r="7" fill="none" stroke="#cfcfcf" stroke-width="1.5"/>'
+                     f'<text x="24" y="{y + 16}" text-anchor="middle" font-family="{SANS}" font-size="10" font-weight="700" fill="#cfcfcf">i</text>')
+            col = TEXT
+        else:
+            g.append(f'<path d="M17,{y + 18} l7,-13 l7,13 Z" fill="#e8b339"/>'
+                     f'<text x="24" y="{y + 17}" text-anchor="middle" font-family="{SANS}" font-size="9" font-weight="700" fill="#222">!</text>')
+            col = "#e8b339"
+        g.append(f'<text x="40" y="{y + 16}" font-family="{MONO}" font-size="12" fill="{DIM}">[09:{i * 3:02d}:{(i * 17) % 60:02d}]</text>'
+                 f'<text x="118" y="{y + 16}" font-family="{MONO}" font-size="12" fill="{col}">{esc(msg)}</text>')
+        g.append("</g>")
+        s.append("".join(g))
+        y += 24
+    s.append(f'<rect x="6" y="{y + 2}" width="{W - 12}" height="1" fill="{LINE}"/>'
+             f'<text x="16" y="{y + 22}" font-family="{MONO}" font-size="12" fill="{BLUE}">&gt;</text>'
+             f'<rect x="30" y="{y + 11}" width="8" height="14" fill="{TEXT}"><animate attributeName="opacity" values="1;1;0;0" dur="1s" repeatCount="indefinite"/></rect>')
+    s.append("</svg>")
+    write("assets/editor/console.svg", "".join(s))
+
+
+# ─────────────────────────────── PREFAB CARDS (prototypes) ───────────────────────────────
+def prefab(p):
+    W, H = 440, 150
+    s = open_svg(W, H)
+    s.append(f'<rect x="4" y="4" width="{W - 8}" height="{H - 8}" fill="{PANEL}"/>')
+    s.append(tabs(4, 4, W - 8, [("▦", "Project")], right_text=f"Prototypes/{p['file']}"))
+    s.append(f'<rect x="18" y="44" width="80" height="80" rx="6" fill="#323232"/>' + cube(34, 58, 48, p["color"]))
+    s.append(f'<text x="114" y="64" font-family="{SANS}" font-size="16" font-weight="700" fill="#fff">{esc(p["title"])}</text>')
+    s.append(f'<text x="114" y="86" font-family="{SANS}" font-size="12" fill="{LABEL}">{esc(p["desc"])}</text>')
+    s.append(chips(p["tech"], 114, 102, W - 14))
+    s.append("</svg>")
+    write(f"assets/editor/{p['slug']}.svg", "".join(s))
+
+
+# ─────────────────────────────── SECTION HEADER + STATUS BAR ───────────────────────────────
+def section(slug, icon, label, path):
+    W, H = 900, 30
+    w = int(tw(label, 12.5) + 44)
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">',
+         f'<rect width="{W}" height="{H}" rx="5" fill="{TABBAR}"/>',
+         f'<rect x="0" y="0" width="{w}" height="{H}" rx="5" fill="{TAB}"/><rect x="0" y="0" width="{w}" height="2" fill="{BLUE}"/>',
+         f'<text x="12" y="20" font-family="{SANS}" font-size="12" fill="{TEXT}">{icon}</text>',
+         f'<text x="28" y="20" font-family="{SANS}" font-size="12.5" font-weight="600" fill="{TEXT}">{esc(label)}</text>',
+         f'<text x="{w + 14}" y="20" font-family="{MONO}" font-size="11.5" fill="{DIM}">{esc(path)}</text>',
+         "</svg>"]
+    write(f"assets/editor/section-{slug}.svg", "".join(s))
+
+
+def status_bar():
+    W, H = 900, 30
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">',
+         f'<rect width="{W}" height="{H}" rx="5" fill="#2b2b2b"/>',
+         f'<circle cx="16" cy="15" r="6" fill="#5cb85c"/><path d="M13,15 l2,2 l4,-4" fill="none" stroke="#fff" stroke-width="1.6"/>',
+         f'<text x="30" y="19.5" font-family="{SANS}" font-size="12" fill="{TEXT}">Build succeeded · Thanks for visiting · Always learning, always building</text>',
+         f'<rect x="{W - 190}" y="11" width="120" height="8" rx="4" fill="#1a1a1a"/>',
+         f'<rect x="{W - 190}" y="11" width="0" height="8" rx="4" fill="{BLUE}"><animate attributeName="width" values="0;120;120" keyTimes="0;.8;1" dur="4s" repeatCount="indefinite"/></rect>',
+         f'<text x="{W - 14}" y="19.5" text-anchor="end" font-family="{SANS}" font-size="11" fill="{LABEL}">Ready</text>',
+         "</svg>"]
+    write("assets/editor/status-bar.svg", "".join(s))
 
 
 GAMES = [
-    ("haunted-hotel", "Haunted Hotel Empire", "3D Idle Tycoon", "Check in. Never check out.", ["Unity", "C#", "Idle Economy", "WebGL"], "WEB · PLAYGAMA", "▶ PLAY FREE", "#A78BFA", "#38BDF8"),
-    ("last-bunker", "Last Bunker", "Idle Zombie Defense", "Hold the line. Survive the night.", ["Unity", "C#", "Wave Spawning", "Pooling"], "WEB · PLAYGAMA", "▶ PLAY FREE", "#F87171", "#FB923C"),
-    ("arcane-ascent", "Arcane Ascent", "Puzzle Platformer", "The Void Tower awaits. The only way out is UP.", ["Unity", "C#", "HLSL", "2D Physics"], "WEB · WINDOWS · ITCH.IO", "▶ PLAY FREE", "#C084FC", "#818CF8"),
-    ("orbit-rogue", "Orbit Rogue", "Boss Rush · Bullet Hell", "Stuck in orbit. Destined for glory.", ["Unity", "C#", "Roguelite", "AI FSM"], "WEB · WINDOWS · ITCH.IO", "▶ PLAY FREE", "#22D3EE", "#3B82F6"),
-    ("last-service", "Last Service", "Psychological Horror", "The station is closed. One final task remains.", ["Unity", "C#", "3D", "Narrative"], "WINDOWS · ITCH.IO", "▶ DOWNLOAD", "#94A3B8", "#EF4444"),
-    ("zombie-rush", "Zombie Rush", "FPS · Wave Survival", "Survive the horde. Adapt or be overrun.", ["Unity", "C#", "FPS", "Enemy AI"], "WINDOWS · ITCH.IO", "▶ DOWNLOAD", "#84CC16", "#22C55E"),
-    ("word-hunter", "Word Hunter", "Word Puzzle", "The ultimate test of vocabulary and speed.", ["Unity", "C#", "UI Toolkit", "Algorithms"], "WEB · WINDOWS · ITCH.IO", "▶ PLAY FREE", "#34D399", "#38BDF8"),
-    ("tic-tac-toe", "Tic-Tac-Toe Online", "Online Multiplayer", "A classic rebuilt around real-time netcode.", ["Unity", "C#", "Photon PUN 2"], "WEB · WINDOWS · ITCH.IO", "▶ PLAY FREE", "#F472B6", "#A78BFA"),
+    dict(slug="haunted-hotel", title="Haunted Hotel Empire", genre="3D Idle Tycoon", tagline="Check in. Never check out.", tech=["Unity", "C#", "Idle Economy", "WebGL"], platform="WEB · PLAYGAMA", color="#a78bfa"),
+    dict(slug="last-bunker", title="Last Bunker", genre="Idle Zombie Defense", tagline="Hold the line. Survive the night.", tech=["Unity", "C#", "Wave Spawning", "Pooling"], platform="WEB · PLAYGAMA", color="#f87171"),
+    dict(slug="arcane-ascent", title="Arcane Ascent", genre="Puzzle Platformer", tagline="The Void Tower awaits. The only way out is up.", tech=["Unity", "C#", "HLSL", "2D Physics"], platform="WEB · WIN · ITCH", color="#c084fc"),
+    dict(slug="orbit-rogue", title="Orbit Rogue", genre="Boss Rush · Bullet Hell", tagline="Stuck in orbit. Destined for glory.", tech=["Unity", "C#", "Roguelite", "AI FSM"], platform="WEB · WIN · ITCH", color="#22d3ee"),
+    dict(slug="word-hunter", title="Word Hunter", genre="Word Puzzle", tagline="The ultimate test of vocabulary and speed.", tech=["Unity", "C#", "UI Toolkit", "Algorithms"], platform="WEB · WIN · ITCH", color="#34d399"),
+    dict(slug="tic-tac-toe", title="Tic-Tac-Toe Online", genre="Online Multiplayer", tagline="A classic rebuilt around real-time netcode.", tech=["Unity", "C#", "Photon PUN 2"], platform="WEB · WIN · ITCH", color="#f472b6"),
+    dict(slug="last-service", title="Last Service", genre="Psychological Horror", tagline="The station is closed. One final task remains.", tech=["Unity", "C#", "3D", "Narrative"], platform="WIN · ITCH", color="#94a3b8"),
+    dict(slug="zombie-rush", title="Zombie Rush", genre="FPS · Wave Survival", tagline="Survive the horde. Adapt or be overrun.", tech=["Unity", "C#", "FPS", "Enemy AI"], platform="WIN · ITCH", color="#84cc16"),
 ]
 
 TOOLS = [
-    ("smart-toolkit", "Smart Toolkit", "Web App", "Calculators, tools & guides for game devs.", ["Next.js", "TypeScript", "Tailwind"], "SMARTTOOLKIT.APP", "▶ OPEN", "#38BDF8", "#2F6BFF"),
-    ("debug-the-day", "Debug the Day", "Gamified Life App", "Tasks, habits & money, with XP and quests.", ["Next.js", "TypeScript", "Supabase"], "WEB · PWA", "▶ OPEN", "#4ADE80", "#22D3EE"),
-    ("smart-autosave", "Smart AutoSave", "Unity Editor Tool", "Never lose a scene again. Free & open source.", ["Unity", "C#", "Editor", "UIElements"], "UNITY 2021.3+ · ITCH.IO", "★ GET IT", "#FBBF24", "#38BDF8"),
+    dict(slug="smart-toolkit", title="Smart Toolkit", kind="Web App", desc="Practical calculators, tools and guides for everyday game development.", tech=["Next.js", "TypeScript", "Tailwind"], button="Open smarttoolkit.app", status="Live"),
+    dict(slug="debug-the-day", title="Debug the Day", kind="Gamified Life App", desc="Tasks, habits, money and notes, levelled up with XP and quests.", tech=["Next.js", "TypeScript", "Supabase"], button="Open App", status="Live"),
+    dict(slug="smart-autosave", title="Smart AutoSave", kind="Unity Editor Extension", desc="Auto-save and rolling scene backups so you never lose a scene again.", tech=["Unity", "C#", "Editor", "UIElements"], button="Get on itch.io", status="Free · Open source"),
 ]
 
-
-# ─────────────────────────────── MINI CARDS (no screenshot) ───────────────────────────────
-def mini_card(slug, glyph, title, desc, tags, a, b):
-    W, H, u = 290, 210, "m"
-    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">', defs(u, a, b, W, H)]
-    s.append(f'<circle cx="48" cy="52" r="26" fill="{a}" fill-opacity=".1" stroke="url(#acc{u})" stroke-width="2" filter="url(#glow{u})"/>')
-    s.append(f'<circle cx="48" cy="52" r="33" fill="none" stroke="{a}" stroke-opacity=".35" stroke-dasharray="4 6"><animateTransform attributeName="transform" type="rotate" from="0 48 52" to="360 48 52" dur="12s" repeatCount="indefinite"/></circle>')
-    s.append(f'<text x="48" y="59" text-anchor="middle" font-family="{MONO}" font-size="18" font-weight="700" fill="{a}">{esc(glyph)}</text>')
-    s.append(f'<text x="92" y="48" font-family="{SANS}" font-size="17" font-weight="900" fill="#fff">{esc(title)}</text>')
-    s.append(f'<rect x="92" y="56" width="60" height="2" fill="url(#acc{u})"><animate attributeName="width" values="20;80;20" dur="4s" repeatCount="indefinite"/></rect>')
-    y = 104
-    for line in desc:
-        s.append(f'<text x="22" y="{y}" font-family="{SANS}" font-size="13" fill="#b6c6e0">{esc(line)}</text>')
-        y += 20
-    s.append(chips(tags, 22, 168, a, 272))
-    s.append(scanline(u, W, H, 5))
-    s.append("</svg>")
-    write(f"assets/projects/{slug}.svg", "".join(s))
-
-
-MINIS = [
-    ("multiplayer-racer", "P2", "Top-Down Racer", ["2D racing prototype exploring", "multiplayer networking."], ["Unity", "Netcode"], "#F472B6", "#A78BFA"),
-    ("retro-pong", "C++", "Retro Pong Rebooted", ["Pong remake with menus, CPU AI", "and PvP, written from scratch."], ["C++", "Raylib"], "#38BDF8", "#2F6BFF"),
+PREFABS = [
+    dict(slug="prefab-racer", file="TopDownRacer.prefab", title="Top-Down Racer", desc="2D racing prototype exploring multiplayer networking.", tech=["Unity", "C#", "Netcode"], color="#f472b6"),
+    dict(slug="prefab-pong", file="RetroPong.prefab", title="Retro Pong Rebooted", desc="Pong remake with menus, CPU AI and PvP, from scratch.", tech=["C++", "Raylib"], color="#4a9eff"),
 ]
-
-
-# ─────────────────────────────── SKILL TREE ───────────────────────────────
-def skill_tree():
-    W, H, u = 900, 400, "s"
-    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">', defs(u, BLUE, BLUE2, W, H)]
-    s.append(f'<text x="450" y="44" text-anchor="middle" font-family="{MONO}" font-size="20" font-weight="700" letter-spacing="6" fill="url(#acc{u})" filter="url(#glow{u})">// SKILL TREE</text>')
-    s.append(scanline(u, W, H, 6))
-    branches = [
-        (160, "GAMEPLAY", "#38BDF8", ["Gameplay Systems", "Game Feel & Juice", "Enemy AI · FSMs", "Procedural Gen"]),
-        (450, "ENGINEERING", "#A78BFA", ["Object Pooling · Perf", "Shaders · HLSL", "Multiplayer · Photon", "WebGL Publishing"]),
-        (740, "CRAFT", "#FBBF24", ["Game Design", "3D Art · Blender/Maya", "Animation", "Editor Tools"]),
-    ]
-    root_y = 82
-    s.append(f'<circle cx="450" cy="{root_y}" r="16" fill="#0b1324" stroke="url(#acc{u})" stroke-width="2.5" filter="url(#glow{u})"/>'
-             f'<text x="450" y="{root_y + 4}" text-anchor="middle" font-family="{MONO}" font-size="10" font-weight="700" fill="#fff">SHK</text>')
-    for bi, (x, name, c, nodes) in enumerate(branches):
-        path = f"M450,{root_y + 16} C450,118 {x},104 {x},128"
-        s.append(f'<path d="{path}" fill="none" stroke="{c}" stroke-opacity=".35" stroke-width="2"/>')
-        s.append(f'<path d="{path}" fill="none" stroke="{c}" stroke-width="3" pathLength="100" stroke-dasharray="10 90" filter="url(#glow{u})"><animate attributeName="stroke-dashoffset" values="100;0" dur="2.5s" begin="{bi * .4:.1f}s" repeatCount="indefinite"/></path>')
-        s.append(f'<rect x="{x - 90}" y="128" width="180" height="30" rx="6" fill="{c}" fill-opacity=".14" stroke="{c}"/>'
-                 f'<text x="{x}" y="148" text-anchor="middle" font-family="{MONO}" font-size="13" font-weight="700" fill="{c}" letter-spacing="3">{name}</text>')
-        s.append(f'<line x1="{x}" y1="158" x2="{x}" y2="{176 + 52 * (len(nodes) - 1)}" stroke="{c}" stroke-opacity=".3" stroke-width="2"/>')
-        s.append(f'<circle cx="{x}" cy="160" r="3" fill="{c}" filter="url(#glow{u})"><animate attributeName="cy" values="160;{176 + 52 * (len(nodes) - 1)}" dur="3s" begin="{bi * .5:.1f}s" repeatCount="indefinite"/></circle>')
-        for ni, label in enumerate(nodes):
-            ny = 176 + 52 * ni
-            s.append(f'<path d="M{x - 104},{ny} H{x + 96} L{x + 104},{ny + 8} V{ny + 34} H{x - 96} L{x - 104},{ny + 26} Z" fill="#0b1324" stroke="{c}" stroke-opacity=".45"/>')
-            s.append(f'<rect x="{x - 104}" y="{ny + 6}" width="3" height="22" fill="{c}"/>')
-            s.append(f'<text x="{x - 88}" y="{ny + 22}" font-family="{SANS}" font-size="13.5" font-weight="600" fill="#e6efff" opacity="0">{esc(label)}'
-                     f'<animate attributeName="opacity" values="0;1" dur=".4s" begin="{.3 + .15 * ni + .2 * bi:.2f}s" fill="freeze"/></text>')
-            s.append(f'<circle cx="{x + 88}" cy="{ny + 17}" r="4" fill="{c}"><animate attributeName="opacity" values="1;.3;1" dur="2s" begin="{ni * .3:.1f}s" repeatCount="indefinite"/></circle>')
-    s.append("</svg>")
-    write("assets/skill-tree.svg", "".join(s))
 
 
 if __name__ == "__main__":
-    player_card()
-    skill_tree()
+    header()
+    inspector()
+    hierarchy(GAMES)
     for g in GAMES:
-        game_card(*g)
-    for t in TOOLS:
-        game_card(*t, folder="tools")
-    for m in MINIS:
-        mini_card(*m)
+        game_card(g)
+    packages_header()
+    for i, t in enumerate(TOOLS):
+        package_row(t, i)
+    console()
+    for p in PREFABS:
+        prefab(p)
+    section("stack", "▦", "Project", "Assets/TechStack")
+    section("stats", "▥", "Profiler", "GitHub activity")
+    section("snake", "≋", "Timeline", "Contributions.anim")
+    status_bar()
